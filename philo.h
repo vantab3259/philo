@@ -6,7 +6,7 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 01:41:05 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/08 10:52:53 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/08 11:44:35 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	ft_usleep(long ms);
 void	print(t_philo *philo, char *str);
 int		is_dead(t_info	*info);
 void	check_death(t_info *info, t_philo *philo);
-int		cheak_eating(t_info *info, t_philo *philo, long eating);
+int		death_or_no(t_info *info, t_philo *philo, long eating);
 int 	start_philo(t_info *info, t_philo *philo);
 void	*routine(void *truc);
 t_philo *init_philo(t_info *info, t_philo *philo, char **av, int ac);

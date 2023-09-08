@@ -6,7 +6,7 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:21:23 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/08 11:21:23 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/08 11:53:13 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int while_routine(t_philo *philo, int count)
 {
 	while (!is_dead(philo->info))
 	{
-		if (philo->info->nb_philo % 2 && count)
+	 	if (philo->info->nb_philo % 2 && count)
 			ft_usleep(philo->info->time_to_die * 0.25);
 		if (philo->id % 2 != 0)
 		{

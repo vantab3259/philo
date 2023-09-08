@@ -6,13 +6,13 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 02:37:01 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/08 10:38:09 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/08 11:37:05 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	cheak_eating(t_info *info, t_philo *philo, long eating)
+int	death_or_no(t_info *info, t_philo *philo, long eating)
 {
 	if (eating > info->time_to_die)
 	{
@@ -34,13 +34,13 @@ void	check_death(t_info *info, t_philo *philo)
 	finish = 0;
 	while (1)
 	{
-		int	i = 0;
-		while (i < info->nb_philo)
+		int	i = -1;
+		while (++i < info->nb_philo)
 		{
 			pthread_mutex_lock(&philo[i].eating);
 			eating = gettime() - philo[i].last_meal;
 			pthread_mutex_unlock(&philo[i].eating);
-			if (cheak_eating(info, philo, eating))
+			if (death_or_no(info, philo, eating))
 				return ;
 			pthread_mutex_lock(&philo->info->finish);
 			finish = info->finished;
@@ -50,7 +50,6 @@ void	check_death(t_info *info, t_philo *philo)
 				print(philo, "has finish to eat\n");
 				return ;
 			}
-			i++;
 		}
 		usleep(100);
 	}
@@ -73,6 +72,9 @@ int	main(int ac, char **av)
 		pthread_join(philo[i].thread, NULL);
 		i++;
 	}
+	pthread_mutex_destroy(&info.print);
+	pthread_mutex_destroy(&info.finish);
+	pthread_mutex_destroy(&info.death);
 	free(philo);
 	
 }
