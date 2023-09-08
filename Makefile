@@ -6,13 +6,16 @@
 #    By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/15 05:24:25 by mudoh             #+#    #+#              #
-#    Updated: 2023/05/15 18:26:51 by mudoh            ###   ########.fr        #
+#    Updated: 2023/09/07 10:35:27 by mudoh            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
-SRCS = main.c utils.c
+SRCS = main.c\
+	routine.c\
+	utils.c\
+	init.c
 
 OBJS = ${SRCS:.c=.o}
 

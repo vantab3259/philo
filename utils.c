@@ -6,7 +6,7 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 05:41:10 by mudoh             #+#    #+#             */
-/*   Updated: 2023/05/16 19:06:19 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/07 09:12:41 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_dead(t_info	*info)
 	pthread_mutex_lock(&info->death);
 	dead = info->dead;
 	pthread_mutex_unlock(&info->death);
-	return (dead); // reflechiiiiii!!!! dans la boucle!!!!!!! et dans la fonction frint!!!!!
+	return (dead); 
 }
 
 long	gettime(void)
@@ -32,15 +32,13 @@ long	gettime(void)
 
 void	print(t_philo *philo, char *str)
 {
-	// reflechiiiiii!!!! pourquoi pas???
 	pthread_mutex_lock(&philo->info->print);
 	if (is_dead(philo->info) == 1)
 	{
-		// printf("haja");
 		pthread_mutex_unlock(&philo->info->print);
 		return ;
 	}
-	printf("%08ld %d %s", gettime() - philo->info->time_start, philo->id + 1, str);
+	printf("%ld %d %s", gettime() - philo->info->time_start, philo->id + 1, str);
 	pthread_mutex_unlock(&philo->info->print);
 }
 
