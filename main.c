@@ -6,11 +6,21 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 02:37:01 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/08 11:37:05 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/10 14:13:44 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	is_dead(t_info *info)
+{
+	int	dead;
+
+	pthread_mutex_lock(&info->death);
+	dead = info->dead;
+	pthread_mutex_unlock(&info->death);
+	return (dead);
+}
 
 int	death_or_no(t_info *info, t_philo *philo, long eating)
 {
@@ -20,21 +30,23 @@ int	death_or_no(t_info *info, t_philo *philo, long eating)
 		info->dead = 1;
 		pthread_mutex_unlock(&info->death);
 		pthread_mutex_lock(&info->print);
-		printf("%08ld %d %s", gettime() - philo->info->time_start, philo->id, "has died\n");
+		printf("%ld %d %s", gettime() - philo->info->time_start, philo->id + 1,
+			"died\n");
 		pthread_mutex_unlock(&info->print);
 		return (1);
 	}
-	return(0);
+	return (0);
 }
-void	check_death(t_info *info, t_philo *philo)
+
+void	check_death(t_info *info, t_philo *philo, int i)
 {
-	int finish;
-	long eating;
-	
+	int		finish;
+	long	eating;
+
 	finish = 0;
 	while (1)
 	{
-		int	i = -1;
+		i = -1;
 		while (++i < info->nb_philo)
 		{
 			pthread_mutex_lock(&philo[i].eating);
@@ -45,7 +57,7 @@ void	check_death(t_info *info, t_philo *philo)
 			pthread_mutex_lock(&philo->info->finish);
 			finish = info->finished;
 			pthread_mutex_unlock(&philo->info->finish);
-			if(finish == info->nb_philo)
+			if (finish == info->nb_philo)
 			{
 				print(philo, "has finish to eat\n");
 				return ;
@@ -54,11 +66,12 @@ void	check_death(t_info *info, t_philo *philo)
 		usleep(100);
 	}
 }
+
 int	main(int ac, char **av)
 {
 	t_info	info;
 	int		i;
-	t_philo *philo;
+	t_philo	*philo;
 
 	i = 0;
 	philo = 0;
@@ -66,7 +79,7 @@ int	main(int ac, char **av)
 		return (write(2, "nombre d'arguments\n", 19), 2);
 	philo = init_philo(&info, philo, av, ac);
 	start_philo(&info, philo);
-	check_death(&info, philo);
+	check_death(&info, philo, i);
 	while (i < info.nb_philo)
 	{
 		pthread_join(philo[i].thread, NULL);
@@ -76,10 +89,4 @@ int	main(int ac, char **av)
 	pthread_mutex_destroy(&info.finish);
 	pthread_mutex_destroy(&info.death);
 	free(philo);
-	
 }
-
-
-
-	
-

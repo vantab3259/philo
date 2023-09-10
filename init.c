@@ -6,35 +6,54 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 10:36:01 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/08 11:12:30 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/10 14:11:06 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int start_philo(t_info *info, t_philo *philo)
+int	start_philo(t_info *info, t_philo *philo)
 {
-	int i = 0;
-	
+	int	i;
+
+	i = 0;
 	while (i < info->nb_philo)
 	{
 		pthread_create(&philo[i].thread, NULL, &routine, &philo[i]);
 		i++;
 	}
-	return(0);
+	return (0);
 }
-static void init_info(t_info *info, char **av, int ac)
+
+static void	init_info_part2(t_info *info, char **av)
 {
-	info->nb_philo = atoi(av[1]);
-	info->time_to_die = atoi(av[2]);
-	info->time_to_eat = atoi(av[3]);
-	info->time_to_sleep  = atoi(av[4]);
-	if (info->nb_philo <= 0 || info->time_to_die <= 0
-		|| info->time_to_eat <= 0 || info->time_to_sleep <= 0)
+	if (!ft_atoi(&info->nb_philo, av[1]))
 	{
 		printf("Error arguments\n");
-		exit(1);
+		exit (1);
 	}
+	if (!ft_atoi(&info->time_to_die, av[2]))
+	{
+		printf("Error arguments\n");
+		exit (1);
+	}
+	if (!ft_atoi(&info->time_to_eat, av[3]))
+	{
+		printf("Error arguments\n");
+		exit (1);
+	}
+	if (!ft_atoi(&info->time_to_sleep, av[4]))
+	{
+		printf("Error arguments\n");
+		exit (1);
+	}
+	info->dead = 0;
+	info->finished = 0;
+}
+
+static void	init_info(t_info *info, char **av, int ac)
+{
+	init_info_part2(info, av);
 	if (ac == 6)
 	{
 		info->max_eat = atoi(av[5]);
@@ -44,34 +63,35 @@ static void init_info(t_info *info, char **av, int ac)
 			exit(1);
 		}
 	}
-	if (ac == 6)
-		info->max_eat = atoi(av[5]);
-	else 
-		info->max_eat = 0; // 0?
+	else
+		info->max_eat = 0;
 }
 
-t_philo *init_philo(t_info *info, t_philo *philo, char **av, int ac)
+t_philo	*init_philo(t_info *info, t_philo *philo, char **av, int ac)
 {
+	int	i;
+
+	i = 0;
 	init_info(info, av, ac);
-	info->dead  = 0;
-	info->finished  = 0;
 	philo = calloc(sizeof(t_philo), info->nb_philo);
 	info->time_start = gettime();
 	pthread_mutex_init(&info->print, NULL);
 	pthread_mutex_init(&info->finish, NULL);
 	pthread_mutex_init(&info->death, NULL);
-	for (int i = 0; i < info->nb_philo; i++)
+	while (i < info->nb_philo)
 	{
 		philo[i].info = info;
 		philo[i].id = i;
 		philo[i].last_meal = info->time_start;
+		philo[i].count_meal = 0;
 		pthread_mutex_init(&philo[i].fork, NULL);
 		pthread_mutex_init(&philo[i].eating, NULL);
 		philo[i].fork_left = &philo[i].fork;
 		if (i == info->nb_philo - 1)
 			philo[i].fork_right = &philo[0].fork;
 		else
-			philo[i].fork_right = &philo[i+1].fork;
+			philo[i].fork_right = &philo[i + 1].fork;
+		i++;
 	}
 	return (philo);
 }
