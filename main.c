@@ -6,7 +6,7 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 02:37:01 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/10 14:13:44 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/11 13:16:09 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int	main(int ac, char **av)
 	if (!(ac >= 5 && ac <= 6))
 		return (write(2, "nombre d'arguments\n", 19), 2);
 	philo = init_philo(&info, philo, av, ac);
-	start_philo(&info, philo);
+	if (start_philo(&info, philo))
+		return (free(philo), printf("echec thread_create"), 0);
 	check_death(&info, philo, i);
 	while (i < info.nb_philo)
 	{

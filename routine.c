@@ -6,7 +6,7 @@
 /*   By: mudoh <mudoh@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 11:21:23 by mudoh             #+#    #+#             */
-/*   Updated: 2023/09/10 14:12:03 by mudoh            ###   ########.fr       */
+/*   Updated: 2023/09/11 11:32:53 by mudoh            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	*routine(void *truc)
 
 	count = 0;
 	philo = truc;
-	if (philo->id % 2 == 0)
-		ft_usleep(philo->info->time_to_eat * 0.25);
+	if (philo->id % 2 != 0)
+		ft_usleep(philo->info->time_to_eat * 0.5);
 	while (1)
 	{
 		if (philo->info->nb_philo % 2 && philo->count_meal)
